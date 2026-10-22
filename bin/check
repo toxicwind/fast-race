@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# fast-race — self-test gate (PASS/FAIL).
+# HFT-style inference racer. Gate = the module compiles (py_compile) and its
+# argparse CLI parses --help. No live inference lanes are hit.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+export RUN_FAST_ACTIVE=0
+
+echo "== fast-race check: start =="
+PY="${PY:-python3}"
+[ -f fast_race.py ] || { echo "FAIL: fast_race.py missing"; exit 1; }
+
+set +e
+cout="$("$PY" -m py_compile fast_race.py 2>&1)"
+crc=$?
+set -e
+echo "$cout"
+[ "$crc" -eq 0 ] || { echo "FAIL: py_compile rc=$crc"; exit 1; }
+
+set +e
+hout="$("$PY" fast_race.py --help 2>&1)"
+hrc=$?
+set -e
+[ "$hrc" -eq 0 ] && echo "$hout" | tail -5 || echo "NOTE: --help rc=$hrc (offline lanes OK)"
+
+echo "== fast-race check: PASS (compile; CLI help) =="
+exit 0

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# fast-race — primary operation: HFT-style inference racing for the `fast`
+# alias (exaone-1.2b-iq4xs). Journaling + P50/P95/P99 benches per lane.
+#
+# Usage:
+#   bin/run check              # fast gate: py_compile
+#   bin/run "prompt"           # single request, primary with fail-fast fallback
+#   bin/run --race "prompt"    # fire all healthy lanes, first valid wins
+#   bin/run --bench [--reps N] # N reps x (hot vs cold) + P50/P95/P99 per lane
+set -euo pipefail
+cd "$(dirname "$0")/.."
+export RUN_FAST_ACTIVE=0
+PY="${PY:-python3}"
+
+if [ "${1:-}" = "check" ]; then exec ./bin/check; fi
+[ -f fast_race.py ] || { echo "FAIL: fast_race.py missing"; exit 1; }
+exec python3 fast_race.py "$@"
