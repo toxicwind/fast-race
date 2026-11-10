@@ -1,0 +1,39 @@
+{
+  "name": "fast-race",
+  "version": "1.0.0",
+  "description": "HFT-style inference racing for the `fast` alias",
+  "main": "fast_race.py",
+  "scripts": {
+    "dev": "python fast_race.py",
+    "test": "pytest",
+    "typecheck": "mypy fast_race.py",
+    "lint": "ruff check .",
+    "fmt": "ruff format .",
+    "build": "python fast_race.py --build",
+    "bin": "ln -sf ../../fast_race.py ./bin/fast-race"
+  },
+  "dependencies": {
+    "httpx": "^0.27.0",
+    "pydantic": "^2.7.0",
+    "rich": "^13.7.1"
+  },
+  "devDependencies": {
+    "pytest": "^8.2.0",
+    "ruff": "^0.4.0",
+    "mypy": "^1.10.0",
+    "types-requests": "^2.31.0"
+  },
+  "bin": {
+    "fast-race": "./fast_race.py"
+  },
+  "keywords": [
+    "hft",
+    "inference",
+    "llm",
+    "fast"
+  ],
+  "author": "toxicwind",
+  "license": "MIT",
+  "private": true,
+  "type": "module"
+}
